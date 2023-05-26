@@ -505,7 +505,7 @@ class BI_1SOM(MAP):
 
                 if (current == bmu_location or self.is_excited(bmu_location, current, x) or norm_of_current_delta > norm_of_current_adaptation):
                     # update the weights
-                    self.weights += delta
+                    self.weights[current] += delta[current]
                     self.adaptations[current] += delta[current]
 
                     # add the neighbors of the current node to the neighbors
@@ -545,7 +545,7 @@ class BI_2SOM(MAP):
         self.sigma = sigma
         self.lrate = lrate
         self.receptives = np.full(self.shape, np.nan)
-        self.n = np.ones(self.shape)
+        self.n = np.zeros(self.shape)
 
     def update_receptive_distances(self, bmu_location: tuple, index: tuple, input: np.ndarray, is_excited: bool) -> None:
         """
@@ -565,7 +565,7 @@ class BI_2SOM(MAP):
         -------
         None
         """
-        dist_to_bmu = np.linalg.norm(index - bmu_location)
+        dist_to_bmu = np.linalg.norm(np.array(index) -np.array(bmu_location))
         dist_to_input = np.linalg.norm(input - self.weights[index])
 
         if (np.isnan(self.receptives[index])):
@@ -577,8 +577,7 @@ class BI_2SOM(MAP):
                     self.receptives[index] + (2 - np.exp(-1*dist_to_bmu**2/self.sigma)) * dist_to_input) / 2
             else:
                 self.receptives[index] = (self.receptives[index] * self.n[index] + (
-                    2 - np.exp(-1*dist_to_bmu**2/self.sigma)) * dist_to_input) / self.n[index]
-
+                    2 - np.exp(-1*dist_to_bmu**2/self.sigma)) * dist_to_input) / (self.n[index] + 1)
     def is_excited(self, bmu_location: tuple, index: tuple, input: np.ndarray) -> bool:
         """
         Check if the index is excited.
@@ -596,7 +595,7 @@ class BI_2SOM(MAP):
         bool
             True if the index is excited, False otherwise.
         """
-        dist_to_bmu = np.linalg.norm(index - bmu_location)
+        dist_to_bmu = np.linalg.norm(np.array(index) -np.array(bmu_location))
         dist_to_input = np.linalg.norm(input - self.weights[index])
 
         if (np.isnan(self.receptives[index])):
@@ -661,13 +660,11 @@ class BI_2SOM(MAP):
             if (current not in visited):
                 # mark the neighbor as visited
                 visited.add(current)
-                self.n[current] += 1
 
                 if (current == bmu_location or self.is_excited(bmu_location, current, x)):
                     # update the weights
-                    eta = np.repeat(
-                        (self.lrate * np.exp(-1*dist_to_bmu**2/self.sigma))[..., np.newaxis], self.dim, axis=-1)
-                    self.weights += eta * (x - self.weights)
+                    eta = self.lrate * np.exp(-1*dist_to_bmu[current]**2/self.sigma)
+                    self.weights[current] += eta * (x - self.weights[current])
 
                     # update the receptive distances
                     self.update_receptive_distances(
@@ -680,7 +677,7 @@ class BI_2SOM(MAP):
                     # update the receptive distances
                     self.update_receptive_distances(
                         bmu_location, current, x, False)
-
+                self.n[current] += 1
 """
 PLSOM - E. Berglund
 """
