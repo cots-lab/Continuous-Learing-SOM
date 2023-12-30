@@ -34,12 +34,10 @@ These implemetation allows to viusalize the convergence in input space. Hence it
 ```
 
 
-## Screenshots
+## Demo
 
-![App Screenshot](https://github.com/cots-lab/Continuous-Learing-SOM/blob/main/images/Figure_1.png)
-![App Screenshot](https://github.com/cots-lab/Continuous-Learing-SOM/blob/main/images/Figure_2.png)
-![App Screenshot](https://github.com/cots-lab/Continuous-Learing-SOM/blob/main/images/Figure_3.png)
-![App Screenshot](https://github.com/cots-lab/Continuous-Learing-SOM/blob/main/images/Figure_4.png)
+https://github.com/cots-lab/Continuous-Learing-SOM/assets/73787312/a06d8324-d62f-497c-92a8-0af84cf61d49
+
 
 ## Acknowledgements
 
