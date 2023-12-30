@@ -36,7 +36,8 @@ These implemetation allows to viusalize the convergence in input space. Hence it
 
 ## Demo
 
-https://github.com/cots-lab/Continuous-Learing-SOM/assets/73787312/a06d8324-d62f-497c-92a8-0af84cf61d49
+https://github.com/cots-lab/Continuous-Learing-SOM/assets/73787312/3d44fc66-93cd-4671-a9d2-1abbc4149bf4
+
 
 
 ## Acknowledgements
